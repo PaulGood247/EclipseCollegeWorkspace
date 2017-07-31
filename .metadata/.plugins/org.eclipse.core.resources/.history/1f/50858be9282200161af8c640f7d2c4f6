@@ -1,0 +1,11 @@
+package evote;
+
+public class Test {
+	static STV stv = new STV();
+	static DAO dao = new DAO();
+	static CountVotes cv = new CountVotes();
+	public static void main(String[] args) {
+		//stv.STVCalculate();
+		int x=dao.getTotalNoOfCand();
+	}
+}

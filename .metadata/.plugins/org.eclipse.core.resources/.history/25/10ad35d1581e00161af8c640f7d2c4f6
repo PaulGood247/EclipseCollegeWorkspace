@@ -1,0 +1,15 @@
+package evote;
+
+import java.util.ArrayList;
+
+public class Test {
+	static STV stv = new STV();
+	static CountVotes cv = new CountVotes();
+	public static void main(String[] args) {
+		//stv.STVCalculate();
+		//cv.redistribute(1,3);
+
+		ArrayList<Integer> oldList = new ArrayList<Integer>();
+		ArrayList<Integer> newList = new ArrayList<Integer>(oldList);
+	}
+}

@@ -1,0 +1,20 @@
+package evote;
+
+import java.util.ArrayList;
+
+public class Test {
+	static STV stv = new STV();
+	static CountVotes cv = new CountVotes();
+	ArrayList<Integer> preferences = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+	ArrayList<Integer> tempPref = new ArrayList<Integer>(preferences);
+	public static void main(String[] args) {
+		//stv.STVCalculate();
+		//cv.recountTotalVotes();
+		/*int x=cv.getNoOfCandidates();
+		System.out.println(x);*/
+		//cv.addToElected(3);
+		//cv.redistribute(2,3);
+		
+		
+	}
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;helloservlets&apos; to &apos;evote&apos;&#x0D;&#x0A;- Original project: &apos;EVoting&apos;&#x0D;&#x0A;- Original element: &apos;EVoting/src/helloservlets&apos;&#x0D;&#x0A;- Renamed element: &apos;EVoting/src/evote&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;helloservlets&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src&lt;helloservlets" name="evote" qualified="false" references="true" stamp="1463465352431" textual="false" version="1.0"/>
+</session>

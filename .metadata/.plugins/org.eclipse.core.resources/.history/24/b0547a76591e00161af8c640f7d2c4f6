@@ -1,0 +1,24 @@
+package evote;
+
+import java.util.ArrayList;
+
+public class Test {
+	static STV stv = new STV();
+	static CountVotes cv = new CountVotes();
+	public static void main(String[] args) {
+		//stv.STVCalculate();
+		//cv.redistribute(1,3);
+
+		ArrayList<Integer> oldList = new ArrayList<Integer>();
+		for(int i=0;i<10;i++){
+			oldList.add(i);
+		}
+		ArrayList<Integer> newList = new ArrayList<Integer>(oldList);
+		
+		for(int i=0;i<oldList.size();i++){
+		    System.out.print(oldList.get(i)+" , ");
+		    System.out.print(" \n ");
+		    System.out.print(newList.get(i)+" , ");
+		}
+	}
+}

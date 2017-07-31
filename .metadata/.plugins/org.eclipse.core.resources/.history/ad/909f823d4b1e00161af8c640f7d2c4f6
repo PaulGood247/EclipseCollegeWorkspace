@@ -1,0 +1,211 @@
+package evote;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import java.io.*;
+import java.lang.*;
+import java.util.*;
+
+public class DAO {
+
+	private static Connection conn 	= null;
+ 	private static Statement stmt 	= null;
+	
+	/*private String host = "localhost", 
+		port			= "3306",
+		database		= "testdb",
+		user			= "root", 
+		password		= "1234";
+	*/
+	private static String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST"), 
+		port			= System.getenv("OPENSHIFT_MYSQL_DB_PORT"),
+		database		= "testapp",
+		user			= System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"), 
+		password		= System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+	 	
+	private DAO(){
+	}
+	
+	public static boolean connect(PrintWriter writer){
+		if(host == null || port == null || database == null || user == null || password == null){
+			// Credentials missing.
+			return false;
+		}
+		try {
+			// Load db driver.
+			Class.forName("com.mysql.jdbc.Driver"); 
+			conn = (Connection) DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, user, password);
+		}catch (ClassNotFoundException e){
+			
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return conn != null;
+	}
+	
+	public static void disconnect(){
+		try{
+			// Remember to close all pending queries and result sets.
+			conn.close();
+		}catch(SQLException e){
+			
+		}
+	}
+	
+	public static boolean testConnection(){
+		try{
+			if(conn != null){
+				stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT 1");
+				return rs.next();
+			}
+		}catch(SQLException e){}
+		return false;
+	}
+	
+	public static int getTotalVoteCount(){
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT SUM(VoteCount) AS count FROM Candidate");
+			if(rs.first()){
+				return rs.getInt("count");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public static int getTotalNoOfCand(){
+		ResultSet rs;
+		int totalNoOfCand = 0;
+		//System.out.println("Creating statement...");
+		try {
+			stmt = conn.createStatement();
+
+			String sql = "SELECT * FROM Candidate";
+			rs = stmt.executeQuery(sql);
+			rs.last();
+			totalNoOfCand= rs.getInt("idCandidate");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return totalNoOfCand;
+	}
+	
+	public static List<Candidate> getAllCandidates(){
+		ResultSet rs;
+		List<Candidate> cans = new ArrayList<Candidate>();
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM candidate");
+			while(rs.next()){
+				cans.add(new Candidate(rs.getInt("idCandidate"), rs.getInt("VoteCount"), rs.getString("CandidateName")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ArrayList();
+		}
+		return cans;
+	}
+	
+	public static int getACandidatesVotes(int x){
+		ResultSet rs;
+        //System.out.println("Creating statement...");
+        int votes = 0;
+        try {
+			stmt = conn.createStatement();
+			// SQL Injection opening right here. Always use prepared statements.
+			String sql = "SELECT * FROM Candidate WHERE idCandidate=" + x;
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+			   //Retrieve by column name
+			   int id  = rs.getInt("idCandidate");
+			   votes  = rs.getInt("VoteCount");
+
+			   //Display values
+			   //System.out.println("ID: " + id+ " ... VOTECOUNT: "+votes);
+			
+			}
+		} catch (SQLException e) {
+		}
+        return votes;
+	}
+	
+	public static void addToElected(int x){
+		//add to elected table
+		System.out.println("Adding Candidate " + x + " to elected table");
+	}
+	
+	public static void redistribute(int candidateID){
+		// update any ballot paper with candidate =x and preference=1
+		ResultSet rs;
+		ArrayList candIDs = new ArrayList<>();
+		ArrayList voterIDs = new ArrayList<>();
+		ArrayList prefernces = new ArrayList<>();
+		try {
+			String query="SELECT voterID FROM ballotpaper WHERE candidateID=? AND preference=1";
+			PreparedStatement preparedStmt = conn.prepareStatement(query);
+			preparedStmt.setInt (1, candidateID);
+			
+			while(rs.next()){
+				cans.add(new Candidate(rs.getInt("idCandidate"), rs.getInt("VoteCount"), rs.getString("CandidateName")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		
+		String sql= "DECLARE "
+				+ ""
+				+ "BEGIN"
+				+ "sqlSelect:= 'SELECT voterID FROM ballotpaper WHERE candidateID = ? AND preference = ?'"
+	}
+	
+	public static void addCandidate(String candidateName ) throws SQLException{
+		String query = "INSERT INTO candidate (candidateName)" 
+		+ " VALUES (?)";
+		// Create the mysql insert preparedstatement
+		PreparedStatement preparedStmt = conn.prepareStatement(query);
+		preparedStmt.setString (1, candidateName);
+
+		// Execute the preparedstatement
+		preparedStmt.execute();
+	}
+	
+	public static void addBallotPaper(int voterID, int preference, int candidateID ) throws SQLException{
+		String query = "INSERT INTO ballotpaper (voterID, preference, candidateID)"
+		+ " VALUES (?, ?, ?)";
+
+		// create the mysql insert preparedstatement
+		PreparedStatement preparedStmt = conn.prepareStatement(query);
+		preparedStmt.setInt (1, voterID);
+		preparedStmt.setInt (2, preference);
+		preparedStmt.setInt (3, candidateID);
+
+		// execute the preparedstatement
+		preparedStmt.execute();
+	}
+	
+	public static void addBallotPaper(List<BallotPaper> papers) throws SQLException{
+		String query = "INSERT INTO ballotpaper (voterID, preference, candidateID)"
+		+ " VALUES (?, ?, ?)";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		int x;
+		if(papers.isEmpty()){
+			return;
+		}
+		for(BallotPaper paper : papers){
+			x = 1;
+			stmt.setInt(x++, paper.voterID);
+			stmt.setInt(x++, paper.preference);
+			stmt.setInt(x, paper.candidateID);
+			stmt.addBatch();
+		}
+		stmt.executeBatch();
+	}
+}

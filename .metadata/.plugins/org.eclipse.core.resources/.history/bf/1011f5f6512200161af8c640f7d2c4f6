@@ -1,0 +1,13 @@
+package evote;
+
+public class Test {
+	static STV stv = new STV();
+	static CountVotes cv = new CountVotes();
+	public static void main(String[] args) {
+		stv.STVCalculate();
+		//cv.recountTotalVotes();
+		/*int x=cv.getNoOfCandidates();
+		System.out.println(x);*/
+		//cv.addToElected(3);
+	}
+}

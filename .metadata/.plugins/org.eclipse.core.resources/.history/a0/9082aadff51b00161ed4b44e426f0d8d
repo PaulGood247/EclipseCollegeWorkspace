@@ -1,0 +1,9 @@
+package evote;
+
+public class Test {
+	static STV stv = new STV();
+	
+	public static void main(String[] args) {
+		stv.STVCalculate();
+	}
+}

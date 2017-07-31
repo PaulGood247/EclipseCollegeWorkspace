@@ -1,0 +1,39 @@
+package evote;
+
+public class CountVotes {
+
+	//receive all votes from client and add them to database and then count each vote per candidate
+
+	int candidateID;
+		
+	public CountVotes(){
+		DAO.connect(null);
+	}
+	public int getTotalVotes(){
+		//check database for total votes
+		return DAO.getTotalVoteCount();
+	}
+	
+	public int getNoOfCandidates(){
+		//check database for no of candidates
+		return DAO.getTotalNoOfCand();
+	}
+	
+	public int getCandVotes(int x){
+		//get a candidates votes by their id
+		
+		return DAO.getACandidatesVotes(x);
+	}
+	
+	public void addToElected(int x){
+		//get a candidates votes by their id
+		DAO.addToElected(x);
+	}
+	
+	public void redistribute(int x, int y){
+		//get a candidates votes by their id
+		x=1;
+		y=3;
+		DAO.redistribute(x,y);
+	}
+}

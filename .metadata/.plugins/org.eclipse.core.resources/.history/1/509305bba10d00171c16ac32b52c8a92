@@ -1,0 +1,6 @@
+<pmd rulesetfiles="/home/tom/data/pmd/pmd/rulesets/java/design.xml,rulesets/java/unusedcode.xml">
+  <formatter type="xml" toFile="foo.xml"/>
+  <fileset dir="/home/tom/data/pmd/pmd/src">
+    <include name="**/*.java"/>
+  </fileset>
+</pmd>
